@@ -27,10 +27,15 @@ class RecordingPaused extends RecorderState {
 
 class RecordingStopped extends RecorderState {
   final String path;
-  const RecordingStopped({required this.path});
+  final int durationSeconds;
+  
+  const RecordingStopped({
+    required this.path, 
+    required this.durationSeconds,
+  });
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [path, durationSeconds];
 }
 
 class UploadingInProgress extends RecorderState {
@@ -51,8 +56,17 @@ class UploadSuccess extends RecorderState {
 
 class RecordFailure extends RecorderState {
   final String error;
-  const RecordFailure({required this.error});
+  final bool isUploadError;
+  final String? path;
+  final int? durationSeconds;
+
+  const RecordFailure({
+    required this.error,
+    this.isUploadError = false,
+    this.path,
+    this.durationSeconds,
+  });
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [error, isUploadError, path, durationSeconds];
 }

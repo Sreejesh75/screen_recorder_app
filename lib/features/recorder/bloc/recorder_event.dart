@@ -23,10 +23,15 @@ class StopRecordingEvent extends RecorderEvent {}
 
 class UploadRecordingEvent extends RecorderEvent {
   final String path;
-  const UploadRecordingEvent({required this.path});
+  final int durationSeconds;
+  
+  const UploadRecordingEvent({
+    required this.path, 
+    required this.durationSeconds,
+  });
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [path, durationSeconds];
 }
 
 class TickEvent extends RecorderEvent {

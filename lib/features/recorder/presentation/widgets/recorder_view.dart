@@ -18,12 +18,33 @@ class RecorderView extends StatelessWidget {
       listener: (context, state) {
         if (state is RecordFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: Colors.redAccent),
+            SnackBar(
+              content: Text(state.error),
+              backgroundColor: Colors.redAccent,
+              duration: const Duration(seconds: 5),
+              action: state.isUploadError && state.path != null && state.durationSeconds != null
+                  ? SnackBarAction(
+                      label: 'Retry',
+                      textColor: Colors.white,
+                      onPressed: () {
+                        context.read<RecorderBloc>().add(UploadRecordingEvent(
+                              path: state.path!,
+                              durationSeconds: state.durationSeconds!,
+                            ));
+                      },
+                    )
+                  : null,
+            ),
           );
         }
         if (state is RecordingStopped) {
-          _showSnackBar(context, 'Saved locally. Uploading to backend...', Colors.greenAccent);
-          context.read<RecorderBloc>().add(UploadRecordingEvent(path: state.path));
+          _showSnackBar(context, 'Saved locally. Uploading to backend...', AppTheme.accent);
+          context.read<RecorderBloc>().add(
+            UploadRecordingEvent(path: state.path, durationSeconds: state.durationSeconds),
+          );
+        }
+        if (state is UploadSuccess) {
+          _showSnackBar(context, state.message, Colors.green);
         }
       },
       builder: (context, state) {
@@ -95,7 +116,7 @@ class RecorderView extends StatelessWidget {
   }
 
   Widget _buildControls(BuildContext context, RecorderState state) {
-    if (state is RecordInitial || state is RecordingStopped || state is UploadSuccess || state is UploadingInProgress) {
+    if (state is! RecordingInProgress && state is! RecordingPaused) {
       return ControlButton(
         icon: Icons.fiber_manual_record,
         label: 'START RECORDING',

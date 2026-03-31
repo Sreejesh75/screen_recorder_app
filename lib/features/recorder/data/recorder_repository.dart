@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 class RecorderRepository {
   final Dio _dio = Dio();
 
-  Future<void> uploadRecording(String filePath, {Function(double)? onProgress}) async {
+  Future<void> uploadRecording(String filePath, int durationSeconds, {Function(double)? onProgress}) async {
     try {
       final File file = File(filePath);
       if (!await file.exists()) {
@@ -12,31 +12,40 @@ class RecorderRepository {
       }
 
       final String fileName = filePath.split('/').last;
+      final int fileSize = file.lengthSync();
       
-      // Dummy endpoint for demonstration. Replace with your actual backend URL.
-      const String uploadUrl = 'https://api.example.com/upload';
+      const String uploadUrl = 'https://webhook.site/b9db1353-5318-4a21-a787-b2872211b090';
 
       final FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(filePath, filename: fileName),
         'timestamp': DateTime.now().toIso8601String(),
+        'duration': durationSeconds,
+        'size_bytes': fileSize,
       });
 
-      await _dio.post(
+      print('API INTEGRATION');
+      print('Starting upload to: $uploadUrl');
+      print('Metadata: duration=$durationSeconds, size=$fileSize bytes');
+
+      final response = await _dio.post(
         uploadUrl,
         data: formData,
         onSendProgress: (sent, total) {
           if (total != -1 && onProgress != null) {
             onProgress(sent / total);
+    
+            if (sent == total) {
+              print('Upload progress: 100%');
+            }
           }
         },
       );
-    } on DioException catch (e) {
-      // Simulate success if the dummy endpoint fails, but log the error
-      // In a real app, we would throw the error
-      print('Upload failed (expected for dummy URL): ${e.message}');
       
-      // For the purpose of the test, let's wait a bit to show progress
-      await Future.delayed(const Duration(seconds: 2));
+      print('Upload successful! Server responded with status: ${response.statusCode}');
+      print('-----------------------');
+    } catch (e) {
+      print('API Error: $e');
+      throw Exception('Upload failed: $e');
     }
   }
 }
