@@ -24,7 +24,7 @@ class ControlButton extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(
               24,
-            ), // Increased size for better "Command Center" feel
+            ), 
             decoration: BoxDecoration(
               color: color.withOpacity(0.12),
               shape: BoxShape.circle,

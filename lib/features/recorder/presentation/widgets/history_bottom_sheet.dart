@@ -70,7 +70,7 @@ class HistoryBottomSheet extends StatelessWidget {
                       ),
                       itemCount: box.length,
                       itemBuilder: (context, index) {
-                        // Reverse the list to show newest first
+                        
                         final Map data = box.getAt(box.length - 1 - index);
                         final DateTime date = DateTime.parse(
                           data['date'] as String,
@@ -78,7 +78,7 @@ class HistoryBottomSheet extends StatelessWidget {
                         final int duration = data['durationSeconds'] as int;
                         final String path = data['path'] as String;
 
-                        // Formatting duration
+                      
                         String twoDigits(int n) => n.toString().padLeft(2, "0");
                         final min = twoDigits(duration ~/ 60);
                         final sec = twoDigits(duration % 60);

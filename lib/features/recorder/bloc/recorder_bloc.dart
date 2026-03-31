@@ -27,11 +27,11 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     Emitter<RecorderState> emit,
   ) async {
     try {
-      // Request permissions explicitly for AUDIO and STORAGE
+      // Request permissions 
       Map<Permission, PermissionStatus> statuses = await [
         Permission.microphone,
         Permission.storage,
-        Permission.photos, // For iOS
+        Permission.photos, 
       ].request();
 
       if (statuses[Permission.microphone]!.isDenied) {
@@ -45,7 +45,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
 
       final String fileName = 'recording_${DateTime.now().millisecondsSinceEpoch}';
 
-      // Start recording WITH audio natively using flutter_screen_recording
+      
       bool started = await FlutterScreenRecording.startRecordScreenAndAudio(
         fileName,
       );
@@ -57,7 +57,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       } else {
         emit(
           const RecordFailure(
-            error: 'Failed to start recording! Is the app installed properly?',
+            error: 'Failed to start recording!?',
           ),
         );
       }
@@ -90,8 +90,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     }
   }
 
-  // flutter_screen_recording doesn't support native pause/resume
-  // We simulate the UI state of pause exactly as requested by the machine test
+ 
   Future<void> _onPauseRecording(
     PauseRecordingEvent event,
     Emitter<RecorderState> emit,
@@ -116,7 +115,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       _stopTimer();
       String finalPath = await FlutterScreenRecording.stopRecordScreen;
 
-      // Save the recording locally using Hive
+      
       final box = Hive.box('recordings');
       await box.add({
         'path': finalPath,
@@ -128,7 +127,6 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
         RecordingStopped(path: finalPath, durationSeconds: _duration.inSeconds),
       );
 
-      // Reset UI to initial state.
       add(ResetEvent());
     } catch (e) {
       emit(RecordFailure(error: e.toString()));

@@ -12,12 +12,12 @@ class RecorderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: double.infinity, // Ensures full width to fix "side shape" issue
+        width: double.infinity, 
         height: double.infinity,
         decoration: const BoxDecoration(color: AppTheme.background),
         child: Stack(
           children: [
-            // Premium background background glow effects
+       
             const BackgroundGlow(
               color: AppTheme.primary,
               position: Offset(-100, -100),
@@ -29,7 +29,7 @@ class RecorderPage extends StatelessWidget {
               size: 400,
             ),
 
-            // Interaction Layer
+        
             SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
