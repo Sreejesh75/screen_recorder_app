@@ -22,7 +22,8 @@ class RecorderView extends StatelessWidget {
           );
         }
         if (state is RecordingStopped) {
-          _showSaveDialog(context, state.path);
+          _showSnackBar(context, 'Saved locally. Uploading to backend...', Colors.greenAccent);
+          context.read<RecorderBloc>().add(UploadRecordingEvent(path: state.path));
         }
       },
       builder: (context, state) {
@@ -53,17 +54,11 @@ class RecorderView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (state is UploadingInProgress)
-              const Padding(
-                padding: EdgeInsets.all(32.0),
-                child: CircularProgressIndicator(color: AppTheme.accent),
-              )
-            else
-              TimerDisplay(duration: duration, color: statusColor),
+            TimerDisplay(duration: duration, color: statusColor),
             const SizedBox(height: 16),
             _buildStatusBadge(status, statusColor, state is RecordingInProgress),
             const SizedBox(height: 80),
-            if (state is! UploadingInProgress) _buildControls(context, state),
+            _buildControls(context, state),
           ],
         );
       },
@@ -100,7 +95,7 @@ class RecorderView extends StatelessWidget {
   }
 
   Widget _buildControls(BuildContext context, RecorderState state) {
-    if (state is RecordInitial || state is RecordingStopped || state is UploadSuccess) {
+    if (state is RecordInitial || state is RecordingStopped || state is UploadSuccess || state is UploadingInProgress) {
       return ControlButton(
         icon: Icons.fiber_manual_record,
         label: 'START RECORDING',
@@ -137,73 +132,9 @@ class RecorderView extends StatelessWidget {
     );
   }
 
-  void _showSaveDialog(BuildContext context, String path) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => Container(
-        padding: const EdgeInsets.all(32),
-        decoration: const BoxDecoration(
-          color: AppTheme.surface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.white12,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 32),
-            const Icon(Icons.check_circle_outline_rounded, color: Colors.greenAccent, size: 64),
-            const SizedBox(height: 20),
-            Text(
-              'Recording Completed!',
-              style: GoogleFonts.outfit(fontSize: 24, fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Your file is securely saved at:\n$path',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.outfit(color: Colors.white54, fontSize: 13, height: 1.5),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.accent,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  context.read<RecorderBloc>().add(UploadRecordingEvent(path: path));
-                },
-                child: Text('UPLOAD TO BACKEND', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  side: const BorderSide(color: Colors.white12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                onPressed: () => Navigator.pop(context),
-                child: Text('DISMISS', style: GoogleFonts.outfit(color: Colors.white70, fontWeight: FontWeight.bold)),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
+  void _showSnackBar(BuildContext context, String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: color),
     );
   }
 }
