@@ -5,11 +5,7 @@ class TimerDisplay extends StatelessWidget {
   final Duration duration;
   final Color color;
 
-  const TimerDisplay({
-    super.key,
-    required this.duration,
-    required this.color,
-  });
+  const TimerDisplay({super.key, required this.duration, required this.color});
 
   @override
   Widget build(BuildContext context) {

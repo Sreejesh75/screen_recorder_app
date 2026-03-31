@@ -27,7 +27,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     Emitter<RecorderState> emit,
   ) async {
     try {
-      // 1. Request permissions explicitly for AUDIO and STORAGE
+      // Request permissions explicitly for AUDIO and STORAGE
       Map<Permission, PermissionStatus> statuses = await [
         Permission.microphone,
         Permission.storage,
@@ -35,13 +35,17 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       ].request();
 
       if (statuses[Permission.microphone]!.isDenied) {
-        emit(const RecordFailure(error: 'Microphone permission denied! Cannot record audio.'));
+        emit(
+          const RecordFailure(
+            error: 'Microphone permission denied! Cannot record audio.',
+          ),
+        );
         return;
       }
 
       final String fileName = 'recording_${DateTime.now().millisecondsSinceEpoch}';
 
-      // 3. Start recording WITH audio
+      // Start recording WITH audio natively using flutter_screen_recording
       bool started = await FlutterScreenRecording.startRecordScreenAndAudio(
         fileName,
       );
@@ -51,7 +55,11 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
         _startTimer();
         emit(RecordingInProgress(duration: _duration));
       } else {
-        emit(const RecordFailure(error: 'Failed to start recording! Is the app installed properly?'));
+        emit(
+          const RecordFailure(
+            error: 'Failed to start recording! Is the app installed properly?',
+          ),
+        );
       }
     } catch (e) {
       emit(RecordFailure(error: e.toString()));
@@ -71,12 +79,14 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       );
       emit(const UploadSuccess(message: 'Recording uploaded successfully!'));
     } catch (e) {
-      emit(RecordFailure(
-        error: e.toString(),
-        isUploadError: true,
-        path: event.path,
-        durationSeconds: event.durationSeconds,
-      ));
+      emit(
+        RecordFailure(
+          error: e.toString(),
+          isUploadError: true,
+          path: event.path,
+          durationSeconds: event.durationSeconds,
+        ),
+      );
     }
   }
 
@@ -114,11 +124,10 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
         'durationSeconds': _duration.inSeconds,
       });
 
-      emit(RecordingStopped(
-        path: finalPath,
-        durationSeconds: _duration.inSeconds,
-      ));
-      
+      emit(
+        RecordingStopped(path: finalPath, durationSeconds: _duration.inSeconds),
+      );
+
       // Reset UI to initial state.
       add(ResetEvent());
     } catch (e) {
@@ -154,4 +163,3 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     return super.close();
   }
 }
-

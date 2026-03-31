@@ -14,9 +14,7 @@ class RecorderPage extends StatelessWidget {
       body: Container(
         width: double.infinity, // Ensures full width to fix "side shape" issue
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppTheme.background,
-        ),
+        decoration: const BoxDecoration(color: AppTheme.background),
         child: Stack(
           children: [
             // Premium background background glow effects
@@ -30,11 +28,11 @@ class RecorderPage extends StatelessWidget {
               position: Offset(200, 400),
               size: 400,
             ),
-            
+
             // Interaction Layer
             SafeArea(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch, 
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 32),
                   _buildHeader(context),
@@ -94,7 +92,11 @@ class RecorderPage extends StatelessWidget {
           ),
           IconButton(
             onPressed: () => HistoryBottomSheet.show(context),
-            icon: const Icon(Icons.history_rounded, color: Colors.white70, size: 28),
+            icon: const Icon(
+              Icons.history_rounded,
+              color: Colors.white70,
+              size: 28,
+            ),
             style: IconButton.styleFrom(
               backgroundColor: Colors.white.withOpacity(0.05),
               padding: const EdgeInsets.all(12),

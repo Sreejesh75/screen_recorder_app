@@ -24,9 +24,9 @@ class StopRecordingEvent extends RecorderEvent {}
 class UploadRecordingEvent extends RecorderEvent {
   final String path;
   final int durationSeconds;
-  
+
   const UploadRecordingEvent({
-    required this.path, 
+    required this.path,
     required this.durationSeconds,
   });
 

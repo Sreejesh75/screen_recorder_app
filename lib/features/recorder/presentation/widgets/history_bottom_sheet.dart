@@ -64,12 +64,17 @@ class HistoryBottomSheet extends StatelessWidget {
 
                     return ListView.builder(
                       controller: scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
                       itemCount: box.length,
                       itemBuilder: (context, index) {
                         // Reverse the list to show newest first
                         final Map data = box.getAt(box.length - 1 - index);
-                        final DateTime date = DateTime.parse(data['date'] as String);
+                        final DateTime date = DateTime.parse(
+                          data['date'] as String,
+                        );
                         final int duration = data['durationSeconds'] as int;
                         final String path = data['path'] as String;
 
@@ -106,12 +111,16 @@ class HistoryBottomSheet extends StatelessWidget {
                                     color: AppTheme.primary.withOpacity(0.2),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(Icons.video_file_rounded, color: AppTheme.primary),
+                                  child: const Icon(
+                                    Icons.video_file_rounded,
+                                    color: AppTheme.primary,
+                                  ),
                                 ),
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         path.split('/').last,

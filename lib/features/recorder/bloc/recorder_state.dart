@@ -28,11 +28,8 @@ class RecordingPaused extends RecorderState {
 class RecordingStopped extends RecorderState {
   final String path;
   final int durationSeconds;
-  
-  const RecordingStopped({
-    required this.path, 
-    required this.durationSeconds,
-  });
+
+  const RecordingStopped({required this.path, required this.durationSeconds});
 
   @override
   List<Object?> get props => [path, durationSeconds];

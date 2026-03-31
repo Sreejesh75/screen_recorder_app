@@ -4,7 +4,11 @@ import 'package:dio/dio.dart';
 class RecorderRepository {
   final Dio _dio = Dio();
 
-  Future<void> uploadRecording(String filePath, int durationSeconds, {Function(double)? onProgress}) async {
+  Future<void> uploadRecording(
+    String filePath,
+    int durationSeconds, {
+    Function(double)? onProgress,
+  }) async {
     try {
       final File file = File(filePath);
       if (!await file.exists()) {
@@ -13,8 +17,9 @@ class RecorderRepository {
 
       final String fileName = filePath.split('/').last;
       final int fileSize = file.lengthSync();
-      
-      const String uploadUrl = 'https://webhook.site/b9db1353-5318-4a21-a787-b2872211b090';
+
+      const String uploadUrl =
+          'https://webhook.site/b9db1353-5318-4a21-a787-b2872211b090';
 
       final FormData formData = FormData.fromMap({
         'file': await MultipartFile.fromFile(filePath, filename: fileName),
@@ -33,15 +38,17 @@ class RecorderRepository {
         onSendProgress: (sent, total) {
           if (total != -1 && onProgress != null) {
             onProgress(sent / total);
-    
+
             if (sent == total) {
               print('Upload progress: 100%');
             }
           }
         },
       );
-      
-      print('Upload successful! Server responded with status: ${response.statusCode}');
+
+      print(
+        'Upload successful! Server responded with status: ${response.statusCode}',
+      );
       print('-----------------------');
     } catch (e) {
       print('API Error: $e');

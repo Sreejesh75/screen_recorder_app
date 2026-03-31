@@ -22,15 +22,20 @@ class RecorderView extends StatelessWidget {
               content: Text(state.error),
               backgroundColor: Colors.redAccent,
               duration: const Duration(seconds: 5),
-              action: state.isUploadError && state.path != null && state.durationSeconds != null
+              action:
+                  state.isUploadError &&
+                      state.path != null &&
+                      state.durationSeconds != null
                   ? SnackBarAction(
                       label: 'Retry',
                       textColor: Colors.white,
                       onPressed: () {
-                        context.read<RecorderBloc>().add(UploadRecordingEvent(
-                              path: state.path!,
-                              durationSeconds: state.durationSeconds!,
-                            ));
+                        context.read<RecorderBloc>().add(
+                          UploadRecordingEvent(
+                            path: state.path!,
+                            durationSeconds: state.durationSeconds!,
+                          ),
+                        );
                       },
                     )
                   : null,
@@ -38,9 +43,16 @@ class RecorderView extends StatelessWidget {
           );
         }
         if (state is RecordingStopped) {
-          _showSnackBar(context, 'Saved locally. Uploading to backend...', AppTheme.accent);
+          _showSnackBar(
+            context,
+            'Saved locally. Uploading to backend...',
+            AppTheme.accent,
+          );
           context.read<RecorderBloc>().add(
-            UploadRecordingEvent(path: state.path, durationSeconds: state.durationSeconds),
+            UploadRecordingEvent(
+              path: state.path,
+              durationSeconds: state.durationSeconds,
+            ),
           );
         }
         if (state is UploadSuccess) {
@@ -77,7 +89,11 @@ class RecorderView extends StatelessWidget {
           children: [
             TimerDisplay(duration: duration, color: statusColor),
             const SizedBox(height: 16),
-            _buildStatusBadge(status, statusColor, state is RecordingInProgress),
+            _buildStatusBadge(
+              status,
+              statusColor,
+              state is RecordingInProgress,
+            ),
             const SizedBox(height: 80),
             _buildControls(context, state),
           ],
@@ -121,7 +137,8 @@ class RecorderView extends StatelessWidget {
         icon: Icons.fiber_manual_record,
         label: 'START RECORDING',
         color: AppTheme.primary,
-        onPressed: () => context.read<RecorderBloc>().add(const StartRecordingEvent()),
+        onPressed: () =>
+            context.read<RecorderBloc>().add(const StartRecordingEvent()),
       );
     }
 
@@ -134,28 +151,31 @@ class RecorderView extends StatelessWidget {
             icon: Icons.pause_rounded,
             label: 'PAUSE',
             color: Colors.orangeAccent,
-            onPressed: () => context.read<RecorderBloc>().add(PauseRecordingEvent()),
+            onPressed: () =>
+                context.read<RecorderBloc>().add(PauseRecordingEvent()),
           )
         else if (state is RecordingPaused)
           ControlButton(
             icon: Icons.play_arrow_rounded,
             label: 'RESUME',
             color: Colors.greenAccent,
-            onPressed: () => context.read<RecorderBloc>().add(ResumeRecordingEvent()),
+            onPressed: () =>
+                context.read<RecorderBloc>().add(ResumeRecordingEvent()),
           ),
         ControlButton(
           icon: Icons.stop_rounded,
           label: 'STOP',
           color: Colors.redAccent,
-          onPressed: () => context.read<RecorderBloc>().add(StopRecordingEvent()),
+          onPressed: () =>
+              context.read<RecorderBloc>().add(StopRecordingEvent()),
         ),
       ],
     );
   }
 
   void _showSnackBar(BuildContext context, String message, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: color),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
   }
 }

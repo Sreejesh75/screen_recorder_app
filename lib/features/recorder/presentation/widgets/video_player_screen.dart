@@ -69,7 +69,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -94,7 +97,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     alignment: Alignment.bottomCenter,
                     children: [
                       VideoPlayer(_controller),
-                      
+
                       // Custom controls overlay
                       AnimatedOpacity(
                         opacity: _showControls ? 1.0 : 0.0,
@@ -110,7 +113,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               ],
                             ),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 32,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -123,14 +129,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: AppTheme.primary.withOpacity(0.5),
+                                        color: AppTheme.primary.withOpacity(
+                                          0.5,
+                                        ),
                                         blurRadius: 12,
                                         spreadRadius: 2,
-                                      )
+                                      ),
                                     ],
                                   ),
                                   child: Icon(
-                                    _isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                    _isPlaying
+                                        ? Icons.pause_rounded
+                                        : Icons.play_arrow_rounded,
                                     color: Colors.white,
                                     size: 36,
                                   ),
