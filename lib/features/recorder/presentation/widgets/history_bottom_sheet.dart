@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:screen_recorder_/core/theme/app_theme.dart';
@@ -18,13 +20,9 @@ class HistoryBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      maxChildSize: 0.9,
-      minChildSize: 0.4,
-      builder: (_, scrollController) {
-        return Container(
-          decoration: const BoxDecoration(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.65,
+      decoration: const BoxDecoration(
             color: AppTheme.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
           ),
@@ -55,15 +53,29 @@ class HistoryBottomSheet extends StatelessWidget {
                   builder: (context, Box box, _) {
                     if (box.isEmpty) {
                       return Center(
-                        child: Text(
-                          'No recordings saved yet.',
-                          style: GoogleFonts.outfit(color: Colors.white54),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.videocam_off_rounded,
+                              size: 64,
+                              color: Colors.white24,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No recordings saved yet.',
+                              style: GoogleFonts.outfit(
+                                color: Colors.white54,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     }
 
                     return ListView.builder(
-                      controller: scrollController,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 8,
@@ -143,6 +155,61 @@ class HistoryBottomSheet extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                                IconButton(
+                                  onPressed: () async {
+                                    final bool? confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        backgroundColor: AppTheme.surface,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(24),
+                                        ),
+                                        icon: Lottie.asset(
+                                          'assets/lottie/Delete_bubble_lottie.json',
+                                          height: 120,
+                                          repeat: false,
+                                        ),
+                                        title: Text('Delete Recording', style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.bold)),
+                                        content: Text(
+                                          'Are you sure you want to permanently delete this video?',
+                                          style: GoogleFonts.outfit(color: Colors.white70),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context, false),
+                                            child: Text('Cancel', style: GoogleFonts.outfit(color: Colors.white54, fontWeight: FontWeight.w600)),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => Navigator.pop(context, true),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent.withOpacity(0.2),
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                            ),
+                                            child: Text('Delete', style: GoogleFonts.outfit(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
+                                    if (confirm == true) {
+                                      final file = File(path);
+                                      if (await file.exists()) {
+                                        await file.delete();
+                                      }
+                                      await box.deleteAt(box.length - 1 - index);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete_outline_rounded,
+                                    color: Colors.redAccent,
+                                  ),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.red.withOpacity(0.1),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -155,7 +222,5 @@ class HistoryBottomSheet extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
   }
 }
