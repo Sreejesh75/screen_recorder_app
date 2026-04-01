@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -155,6 +156,23 @@ class HistoryBottomSheet extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+                                IconButton(
+                                  onPressed: () async {
+                                    final file = XFile(path);
+                                    await Share.shareXFiles(
+                                      [file],
+                                      text: 'Check out my screen recording!',
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.share_rounded,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: Colors.blueAccent.withOpacity(0.1),
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
                                 IconButton(
                                   onPressed: () async {
                                     final bool? confirm = await showDialog<bool>(
