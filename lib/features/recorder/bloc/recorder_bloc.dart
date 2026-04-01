@@ -27,7 +27,6 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     Emitter<RecorderState> emit,
   ) async {
     try {
-      // Request permissions 
       Map<Permission, PermissionStatus> statuses = await [
         Permission.microphone,
         Permission.storage,
@@ -45,7 +44,6 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
 
       final String fileName = 'recording_${DateTime.now().millisecondsSinceEpoch}';
 
-      
       bool started = await FlutterScreenRecording.startRecordScreenAndAudio(
         fileName,
       );
@@ -57,7 +55,7 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       } else {
         emit(
           const RecordFailure(
-            error: 'Failed to start recording!?',
+            error: 'Failed to start recording! Is the app installed properly?',
           ),
         );
       }
@@ -90,7 +88,6 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
     }
   }
 
- 
   Future<void> _onPauseRecording(
     PauseRecordingEvent event,
     Emitter<RecorderState> emit,
@@ -115,7 +112,6 @@ class RecorderBloc extends Bloc<RecorderEvent, RecorderState> {
       _stopTimer();
       String finalPath = await FlutterScreenRecording.stopRecordScreen;
 
-      
       final box = Hive.box('recordings');
       await box.add({
         'path': finalPath,

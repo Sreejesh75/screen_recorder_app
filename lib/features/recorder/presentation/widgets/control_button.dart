@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ControlButton extends StatelessWidget {
@@ -20,7 +21,11 @@ class ControlButton extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: onPressed,
+          onTap: () {
+            HapticFeedback.heavyImpact();
+            SystemSound.play(SystemSoundType.click);
+            onPressed();
+          },
           child: Container(
             padding: const EdgeInsets.all(
               24,

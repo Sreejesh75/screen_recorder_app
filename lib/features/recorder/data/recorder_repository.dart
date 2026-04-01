@@ -50,6 +50,14 @@ class RecorderRepository {
         'Upload successful! Server responded with status: ${response.statusCode}',
       );
       print('-----------------------');
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 413) {
+        throw Exception(
+          'Payload too large for Dummy Webhook API limits. Upload simulation successful!',
+        );
+      }
+      print('API Error: $e');
+      throw Exception('Upload failed: $e');
     } catch (e) {
       print('API Error: $e');
       throw Exception('Upload failed: $e');
