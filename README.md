@@ -1,16 +1,66 @@
-# screen_recorder_
+# Screen Recorder Pro 🎥
 
-A new Flutter project.
+A professional, feature-rich screen and audio recording application built with Flutter. Designed with a clean architecture pattern, this application demonstrates enterprise-level state management, local database persistence, seamless native hardware integrations, and premium UX/UI interactions.
 
-## Getting Started
+## 🌟 Key Features
 
-This project is a starting point for a Flutter application.
+* **High-Quality Screen & Audio Capture**: Natively harnesses the device's hardware encoder and microphone to strictly capture synchronized `.mp4` recordings.
+* **Robust State Management**: Powered heavily by `flutter_bloc` to strictly control asynchronous stream states (Recording, Paused, Error, Uploading, Success).
+* **Local Database Persistence (Hive)**: Stores your complete video history safely via a highly optimized NoSQL `hive` database ensuring instant load-times effortlessly.
+* **Full CRUD & Storage Management**: Automatically manages device memory securely by physically destroying legacy video files straight from internal storage when a user taps 'Delete'.
+* **Cross-Application Sharing**: Features native iOS/Android System Intent Share-Sheets (`share_plus`) that allows immediate `.mp4` sharing to external apps like WhatsApp, Telegram, or Gmail.
+* **API Network Integration**: Silently handles dummy `multipart/form-data` logic using `dio` to upload recorded files to a remote webhook, including robust fallback mitigation for simulated `413 Payload Too Large` restrictions.
+* **Premium UX & Micro-interactions**: Utilizes glassmorphism, dynamic animations, `Lottie` animations for confirmation dialogs, System Click Audio, and massive tactile `HapticFeedback` for physical responses.
+* **Strict Permission Handling**: Employs `permission_handler` to properly request run-time Sandbox boundaries ensuring `RECORD_AUDIO` functions fluently under extreme Android 14 conditions.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🏗️ Architecture & Tech Stack
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project was built following a **Feature-First / Clean Architecture** approach to guarantee modularity and horizontal scalability.
+
+* **Frontend Framework**: Flutter (Dart)
+* **State Management**: `flutter_bloc`
+* **Local Storage / DB**: `hive` & `hive_flutter`
+* **Networking**: `dio`
+* **Core Integrations**:
+  * `flutter_screen_recording` (Video generation algorithm)
+  * `share_plus` (Native system sharing)
+  * `permission_handler` (OS security boundaries)
+  * `lottie` (Vector animations)
+  * `video_player` (Native playback parsing)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Flutter SDK (>= 3.0.0)
+- Android Studio / Xcode
+
+### Installation
+1. Clone the repository
+   ```bash
+   git clone <your-repository-url>
+   ```
+2. Fetch dependencies
+   ```bash
+   flutter pub get
+   ```
+3. Boot the application
+   ```bash
+   flutter run
+   ```
+
+*(Note for Android 14 Developers: Background processes running MediaProjection inherently require explicit runtime notification permission declarations inside modern manifest setups—all of which have been configured in this build.)*
+
+---
+
+## 📱 Screenshots & Demo
+
+*(Optional: Add your screenshots here to show off the beautiful UI and Lottie animations on GitHub!)*
+- `assets/images/logo_dart.png` has been implemented natively as the App Icon using `flutter_launcher_icons`.
+
+---
+
+✨ *Built to showcase Senior-Level production standards in Flutter development.*
