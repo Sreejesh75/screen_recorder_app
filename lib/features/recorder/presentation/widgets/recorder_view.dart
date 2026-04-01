@@ -14,91 +14,97 @@ class RecorderView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RecorderBloc, RecorderState>(
-      listener: (context, state) {
-        if (state is RecordFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error),
-              backgroundColor: Colors.redAccent,
-              duration: const Duration(seconds: 5),
-              action:
-                  state.isUploadError &&
-                      state.path != null &&
-                      state.durationSeconds != null
-                  ? SnackBarAction(
-                      label: 'Retry',
-                      textColor: Colors.white,
-                      onPressed: () {
-                        context.read<RecorderBloc>().add(
-                          UploadRecordingEvent(
-                            path: state.path!,
-                            durationSeconds: state.durationSeconds!,
-                          ),
-                        );
-                      },
-                    )
-                  : null,
-            ),
-          );
-        }
-        if (state is RecordingStopped) {
-          _showSnackBar(
-            context,
-            'Saved locally. Uploading to backend...',
-            AppTheme.accent,
-          );
-          context.read<RecorderBloc>().add(
-            UploadRecordingEvent(
-              path: state.path,
-              durationSeconds: state.durationSeconds,
-            ),
-          );
-        }
-        if (state is UploadSuccess) {
-          _showSnackBar(context, state.message, Colors.green);
-        }
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
       },
-      builder: (context, state) {
-        Duration duration = Duration.zero;
-        String status = "Ready to record";
-        Color statusColor = Colors.white24;
+      child: BlocConsumer<RecorderBloc, RecorderState>(
+        listener: (context, state) {
+          if (state is RecordFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: Colors.redAccent,
+                duration: const Duration(seconds: 5),
+                action:
+                    state.isUploadError &&
+                        state.path != null &&
+                        state.durationSeconds != null
+                    ? SnackBarAction(
+                        label: 'Retry',
+                        textColor: Colors.white,
+                        onPressed: () {
+                          context.read<RecorderBloc>().add(
+                            UploadRecordingEvent(
+                              path: state.path!,
+                              durationSeconds: state.durationSeconds!,
+                            ),
+                          );
+                        },
+                      )
+                    : null,
+              ),
+            );
+          }
+          if (state is RecordingStopped) {
+            _showSnackBar(
+              context,
+              'Saved locally. Uploading to backend...',
+              AppTheme.accent,
+            );
+            context.read<RecorderBloc>().add(
+              UploadRecordingEvent(
+                path: state.path,
+                durationSeconds: state.durationSeconds,
+              ),
+            );
+          }
+          if (state is UploadSuccess) {
+            _showSnackBar(context, state.message, Colors.green);
+          }
+        },
+        builder: (context, state) {
+          Duration duration = Duration.zero;
+          String status = "Ready to record";
+          Color statusColor = Colors.white24;
 
-        if (state is RecordingInProgress) {
-          duration = state.duration;
-          status = "Recording...";
-          statusColor = Colors.redAccent;
-        } else if (state is RecordingPaused) {
-          duration = state.duration;
-          status = "Paused";
-          statusColor = Colors.orangeAccent;
-        } else if (state is RecordingStopped) {
-          status = "Stopped";
-          statusColor = Colors.grey;
-        } else if (state is UploadingInProgress) {
-          status = "Uploading...";
-          statusColor = AppTheme.accent;
-        } else if (state is UploadSuccess) {
-          status = "Uploaded";
-          statusColor = Colors.greenAccent;
-        }
+          if (state is RecordingInProgress) {
+            duration = state.duration;
+            status = "Recording...";
+            statusColor = Colors.redAccent;
+          } else if (state is RecordingPaused) {
+            duration = state.duration;
+            status = "Paused";
+            statusColor = Colors.orangeAccent;
+          } else if (state is RecordingStopped) {
+            status = "Stopped";
+            statusColor = Colors.grey;
+          } else if (state is UploadingInProgress) {
+            status = "Uploading...";
+            statusColor = AppTheme.accent;
+          } else if (state is UploadSuccess) {
+            status = "Uploaded";
+            statusColor = Colors.greenAccent;
+          }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TimerDisplay(duration: duration, color: statusColor),
-            const SizedBox(height: 16),
-            _buildStatusBadge(
-              status,
-              statusColor,
-              state is RecordingInProgress,
-            ),
-            const SizedBox(height: 80),
-            _buildControls(context, state),
-          ],
-        );
-      },
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TimerDisplay(duration: duration, color: statusColor),
+              const SizedBox(height: 16),
+              _buildStatusBadge(
+                status,
+                statusColor,
+                state is RecordingInProgress,
+              ),
+              const SizedBox(height: 80),
+              _buildControls(context, state),
+            ],
+          );
+        },
+      ),
     );
   }
 
