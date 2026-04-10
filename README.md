@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white" alt="Dart" />
+  <img src="https://img.shields.io/badge/Hive-%23FFCA28.svg?style=for-the-badge&logo=databricks&logoColor=black" alt="Hive" />
+</p>
+
 # Screen Recorder Pro 🎥
 
 A professional, feature-rich screen and audio recording application built with Flutter. Designed with a clean architecture pattern, this application demonstrates enterprise-level state management, local database persistence, seamless native hardware integrations, and premium UX/UI interactions.
@@ -60,6 +66,37 @@ This project was built following a **Feature-First / Clean Architecture** approa
 
 *(Optional: Add your screenshots here to show off the beautiful UI and Lottie animations on GitHub!)*
 - `assets/images/logo_dart.png` has been implemented natively as the App Icon using `flutter_launcher_icons`.
+
+---
+
+## 📂 Folder Structure
+
+This project employs a robust **Feature-First** approach layered over Clean Architecture principles:
+
+```text
+lib/
+ ├── core/
+ │    ├── constants/       # App-wide constants (colors, strings, paths)
+ │    ├── network/         # Dio client config and interceptors
+ │    ├── services/        # Third-party integrations (Hive, Permissions)
+ │    └── theme/           # Global typography and styling
+ ├── features/
+ │    └── recorder/        
+ │         ├── bloc/       # Business Logic Components (Events, States)
+ │         ├── data/       # Repositories and Local/Remote data sources
+ │         └── presentation/ # UI Screens, Widgets, and Lottie assets
+ └── main.dart             # App entry point & dependency injection
+```
+
+---
+
+## 🗺️ Roadmap / Future Ideas
+
+- [ ] **Video Trimming & Editing**: Add a post-recording timeline to clip standard formats natively.
+- [ ] **Custom Watermarks**: Allow users to append personalized images/text transparently over the footage.
+- [ ] **Picture-in-Picture (PiP) Camera**: Show the native selfie camera overlay above the screen while recording.
+- [ ] **Cloud Sync (Firebase/AWS)**: Optional secure cloud backup beyond the current Webhook logic.
+- [ ] **Adjustable Bitrates & FPS**: A robust settings panel granting more control to professional content creators.
 
 ---
 

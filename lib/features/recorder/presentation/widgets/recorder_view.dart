@@ -127,7 +127,7 @@ class RecorderView extends StatelessWidget {
             text.toUpperCase(),
             style: GoogleFonts.outfit(
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.bold,
               color: color,
               letterSpacing: 1.5,
             ),
